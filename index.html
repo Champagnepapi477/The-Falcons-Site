@@ -1,868 +1,510 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Falcons — Organisation</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Cinzel:wght@400;600;900&family=IM+Fell+English:ital@0;1&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --gold: #c9a84c;
-    --gold-light: #e8c97a;
-    --gold-dark: #8a6b2a;
-    --blood: #8b1a1a;
-    --blood-dark: #5c0f0f;
-    --dark: #0a0a0a;
-    --darker: #050505;
-    --smoke: #1a1a1a;
-    --ash: #2a2a2a;
-    --fog: #3a3a3a;
-    --cream: #f0e6cc;
-    --cream-dim: #c8b898;
-    --white: #ffffff;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--darker);
-    color: var(--cream);
-    font-family: 'Josefin Sans', sans-serif;
-    overflow-x: hidden;
-    cursor: default;
-  }
-
-  /* TEXTURE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.6;
-  }
-
-  /* ─── HERO ─────────────────────────────────────────────── */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    background: radial-gradient(ellipse at 50% 30%, #1a0a0a 0%, #0a0505 40%, var(--darker) 100%);
-    overflow: hidden;
-    padding: 2rem;
-    text-align: center;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(circle at 20% 50%, rgba(139,26,26,0.12) 0%, transparent 50%),
-      radial-gradient(circle at 80% 50%, rgba(201,168,76,0.06) 0%, transparent 50%);
-  }
-
-  .hero-emblem {
-    font-size: clamp(5rem, 15vw, 10rem);
-    line-height: 1;
-    margin-bottom: 1rem;
-    filter: drop-shadow(0 0 40px rgba(201,168,76,0.3));
-    animation: breathe 4s ease-in-out infinite;
-  }
-
-  @keyframes breathe {
-    0%, 100% { filter: drop-shadow(0 0 30px rgba(201,168,76,0.2)); }
-    50% { filter: drop-shadow(0 0 60px rgba(201,168,76,0.5)); }
-  }
-
-  .hero-title {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(2.5rem, 8vw, 6rem);
-    font-weight: 900;
-    letter-spacing: 0.3em;
-    color: var(--gold);
-    text-shadow: 0 0 60px rgba(201,168,76,0.4), 0 2px 4px rgba(0,0,0,0.8);
-    line-height: 1;
-    animation: fadeDown 1.2s ease forwards;
-  }
-
-  .hero-subtitle {
-    font-family: 'IM Fell English', serif;
-    font-style: italic;
-    font-size: clamp(0.9rem, 2.5vw, 1.3rem);
-    color: var(--cream-dim);
-    letter-spacing: 0.15em;
-    margin-top: 0.8rem;
-    opacity: 0;
-    animation: fadeUp 1.2s 0.5s ease forwards;
-  }
-
-  .hero-line {
-    width: 200px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    margin: 1.5rem auto;
-    opacity: 0;
-    animation: fadeIn 1s 0.8s ease forwards;
-  }
-
-  .hero-tagline {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(0.65rem, 1.5vw, 0.85rem);
-    letter-spacing: 0.5em;
-    color: var(--gold-dark);
-    text-transform: uppercase;
-    opacity: 0;
-    animation: fadeIn 1s 1s ease forwards;
-  }
-
-  .scroll-hint {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    opacity: 0;
-    animation: fadeIn 1s 1.5s ease forwards;
-  }
-
-  .scroll-hint span {
-    font-size: 0.65rem;
-    letter-spacing: 0.4em;
-    color: var(--gold-dark);
-  }
-
-  .scroll-arrow {
-    width: 20px;
-    height: 20px;
-    border-right: 1px solid var(--gold-dark);
-    border-bottom: 1px solid var(--gold-dark);
-    transform: rotate(45deg);
-    animation: bounce 1.5s ease-in-out infinite;
-  }
-
-  @keyframes bounce {
-    0%, 100% { transform: rotate(45deg) translateY(0); }
-    50% { transform: rotate(45deg) translateY(6px); }
-  }
-
-  @keyframes fadeDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-  /* ─── NAV ───────────────────────────────────────────────── */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(5,5,5,0.95);
-    border-bottom: 1px solid rgba(201,168,76,0.2);
-    backdrop-filter: blur(10px);
-  }
-
-  .nav-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 2rem;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .nav-logo {
-    font-family: 'Cinzel', serif;
-    font-size: 1rem;
-    font-weight: 900;
-    color: var(--gold);
-    letter-spacing: 0.3em;
-    padding: 1rem 0;
-    text-decoration: none;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 0;
-    flex-wrap: wrap;
-  }
-
-  .nav-links a {
-    font-family: 'Cinzel', serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    color: var(--cream-dim);
-    text-decoration: none;
-    padding: 1.2rem 1rem;
-    transition: color 0.3s, background 0.3s;
-    border-bottom: 2px solid transparent;
-    text-transform: uppercase;
-  }
-
-  .nav-links a:hover {
-    color: var(--gold);
-    border-bottom-color: var(--gold);
-  }
-
-  /* ─── SECTIONS ──────────────────────────────────────────── */
-  section {
-    padding: 6rem 2rem;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .section-header {
-    text-align: center;
-    margin-bottom: 4rem;
-  }
-
-  .section-number {
-    font-family: 'Cinzel', serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.5em;
-    color: var(--gold-dark);
-    display: block;
-    margin-bottom: 0.8rem;
-  }
-
-  .section-title {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    font-weight: 900;
-    color: var(--gold);
-    letter-spacing: 0.1em;
-    text-shadow: 0 0 30px rgba(201,168,76,0.2);
-  }
-
-  .section-divider {
-    width: 120px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    margin: 1.5rem auto 0;
-  }
-
-  .section-intro {
-    font-family: 'IM Fell English', serif;
-    font-style: italic;
-    font-size: 1.1rem;
-    color: var(--cream-dim);
-    text-align: center;
-    max-width: 700px;
-    margin: 2rem auto 0;
-    line-height: 1.8;
-  }
-
-  /* ─── HISTOIRE ──────────────────────────────────────────── */
-  #histoire {
-    background: linear-gradient(180deg, var(--darker) 0%, #0d0505 50%, var(--darker) 100%);
-    max-width: 100%;
-    padding: 6rem 2rem;
-  }
-
-  #histoire > * { max-width: 1100px; margin-left: auto; margin-right: auto; }
-
-  .story-block {
-    max-width: 800px;
-    margin: 3rem auto 0;
-    position: relative;
-  }
-
-  .story-block::before {
-    content: '\201C';
-    font-family: 'Playfair Display', serif;
-    font-size: 8rem;
-    color: var(--gold-dark);
-    opacity: 0.3;
-    position: absolute;
-    top: -3rem;
-    left: -2rem;
-    line-height: 1;
-    pointer-events: none;
-  }
-
-  .story-para {
-    font-family: 'IM Fell English', serif;
-    font-size: 1.05rem;
-    line-height: 2;
-    color: var(--cream);
-    margin-bottom: 1.8rem;
-    padding-left: 1.5rem;
-    border-left: 2px solid rgba(201,168,76,0.15);
-  }
-
-  .story-para strong {
-    color: var(--gold-light);
-    font-style: normal;
-  }
-
-  /* ─── HIERARCHY ─────────────────────────────────────────── */
-  .hierarchy-stack {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    margin-top: 3rem;
-    position: relative;
-  }
-
-  .hierarchy-stack::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: linear-gradient(180deg, var(--gold-dark), transparent);
-    transform: translateX(-50%);
-    z-index: 0;
-  }
-
-  .rank-card {
-    width: 100%;
-    max-width: 680px;
-    background: linear-gradient(135deg, rgba(26,26,26,0.9), rgba(15,15,15,0.9));
-    border: 1px solid rgba(201,168,76,0.15);
-    position: relative;
-    z-index: 1;
-    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
-    overflow: hidden;
-  }
-
-  .rank-card:hover {
-    transform: scale(1.02);
-    border-color: rgba(201,168,76,0.5);
-    box-shadow: 0 0 40px rgba(201,168,76,0.1), inset 0 0 40px rgba(201,168,76,0.03);
-  }
-
-  .rank-card::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-  }
-
-  .rank-1::before { background: linear-gradient(180deg, var(--gold), var(--gold-dark)); }
-  .rank-2::before { background: linear-gradient(180deg, #c0c0c0, #808080); }
-  .rank-3::before { background: linear-gradient(180deg, #cd7f32, #8b4513); }
-  .rank-4::before { background: linear-gradient(180deg, #555, #333); }
-
-  .rank-inner {
-    padding: 2rem 2rem 2rem 2.5rem;
-  }
-
-  .rank-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin-bottom: 0.8rem;
-  }
-
-  .rank-icon { font-size: 1.4rem; }
-
-  .rank-level {
-    font-family: 'Cinzel', serif;
-    font-size: 0.6rem;
-    letter-spacing: 0.5em;
-    color: var(--gold-dark);
-    text-transform: uppercase;
-  }
-
-  .rank-name {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
-    font-weight: 900;
-    color: var(--gold-light);
-    margin-bottom: 1rem;
-    letter-spacing: 0.05em;
-  }
-
-  .rank-duties {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .rank-duties li {
-    font-size: 0.85rem;
-    color: var(--cream-dim);
-    display: flex;
-    align-items: flex-start;
-    gap: 0.8rem;
-    line-height: 1.6;
-  }
-
-  .rank-duties li::before {
-    content: '—';
-    color: var(--gold-dark);
-    flex-shrink: 0;
-    margin-top: 0.05em;
-  }
-
-  .connector {
-    width: 1px;
-    height: 30px;
-    background: linear-gradient(180deg, var(--gold-dark), rgba(201,168,76,0.3));
-    z-index: 0;
-  }
-
-  .pyramid-label {
-    font-family: 'Cinzel', serif;
-    font-size: 0.55rem;
-    letter-spacing: 0.4em;
-    color: rgba(201,168,76,0.3);
-    text-align: center;
-    padding: 0.5rem;
-  }
-
-  /* ─── INFO CARDS ────────────────────────────────────────── */
-  .info-card {
-    background: linear-gradient(135deg, rgba(20,10,10,0.95), rgba(10,5,5,0.95));
-    border: 1px solid rgba(201,168,76,0.15);
-    padding: 3rem;
-    max-width: 800px;
-    margin: 3rem auto 0;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .info-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 80% 20%, rgba(139,26,26,0.06), transparent 60%);
-    pointer-events: none;
-  }
-
-  .info-card-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    display: block;
-  }
-
-  .info-card-title {
-    font-family: 'Cinzel', serif;
-    font-size: 1rem;
-    letter-spacing: 0.3em;
-    color: var(--gold);
-    margin-bottom: 1.5rem;
-    text-transform: uppercase;
-  }
-
-  .info-card p {
-    font-family: 'IM Fell English', serif;
-    font-size: 1rem;
-    line-height: 1.9;
-    color: var(--cream-dim);
-    margin-bottom: 1rem;
-  }
-
-  .info-card p:last-child { margin-bottom: 0; }
-
-  .info-card strong {
-    color: var(--gold-light);
-    font-style: normal;
-  }
-
-  .info-card em {
-    color: var(--blood);
-    font-style: normal;
-    font-weight: bold;
-  }
-
-  .warning-box {
-    background: rgba(139,26,26,0.1);
-    border: 1px solid rgba(139,26,26,0.3);
-    border-left: 3px solid var(--blood);
-    padding: 1rem 1.5rem;
-    margin-top: 1.5rem;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 0.05em;
-    color: #c87070;
-  }
-
-  .discord-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    background: rgba(88,101,242,0.15);
-    border: 1px solid rgba(88,101,242,0.3);
-    padding: 0.6rem 1.2rem;
-    margin-top: 1.2rem;
-    font-size: 0.8rem;
-    letter-spacing: 0.1em;
-    color: #8899ff;
-    font-family: 'Josefin Sans', sans-serif;
-  }
-
-  /* ─── FOOTER ────────────────────────────────────────────── */
-  footer {
-    background: var(--darker);
-    border-top: 1px solid rgba(201,168,76,0.1);
-    padding: 3rem 2rem;
-    text-align: center;
-  }
-
-  .footer-logo {
-    font-family: 'Cinzel', serif;
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--gold);
-    letter-spacing: 0.3em;
-    margin-bottom: 0.5rem;
-  }
-
-  .footer-sub {
-    font-size: 0.65rem;
-    letter-spacing: 0.5em;
-    color: var(--gold-dark);
-    margin-bottom: 1.5rem;
-  }
-
-  .footer-note {
-    font-family: 'IM Fell English', serif;
-    font-style: italic;
-    font-size: 0.85rem;
-    color: rgba(200,184,152,0.3);
-  }
-
-  /* ─── SECTION SEPARATORS ────────────────────────────────── */
-  .sep {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.15), transparent);
-    margin: 0 auto;
-  }
-
-  /* ─── APPRENTISSAGE STEPS ──────────────────────────────── */
-  .steps {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    max-width: 800px;
-    margin: 3rem auto 0;
-  }
-
-  .step {
-    display: flex;
-    gap: 1.5rem;
-    align-items: flex-start;
-    background: rgba(20,15,10,0.6);
-    border: 1px solid rgba(201,168,76,0.12);
-    padding: 1.5rem 2rem;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.3s;
-  }
-
-  .step:hover { border-color: rgba(201,168,76,0.3); }
-
-  .step-num {
-    font-family: 'Cinzel', serif;
-    font-size: 2rem;
-    font-weight: 900;
-    color: rgba(201,168,76,0.2);
-    flex-shrink: 0;
-    line-height: 1;
-    min-width: 2rem;
-  }
-
-  .step-content h3 {
-    font-family: 'Cinzel', serif;
-    font-size: 0.9rem;
-    letter-spacing: 0.2em;
-    color: var(--gold);
-    margin-bottom: 0.6rem;
-    text-transform: uppercase;
-  }
-
-  .step-content p {
-    font-family: 'IM Fell English', serif;
-    font-size: 0.95rem;
-    color: var(--cream-dim);
-    line-height: 1.7;
-  }
-
-  .step-content strong { color: var(--gold-light); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los Blanco Vatos - Diamond City</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #d4af37;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-nav {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #d4af37;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: #d4af37;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23000" width="1200" height="600"/></svg>');
+            background-size: cover;
+            background-position: center;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-bottom: 5px solid #d4af37;
+        }
+
+        .hero-logo {
+            width: 300px;
+            height: 300px;
+            margin-bottom: 2rem;
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.3));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #d4af37;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+            margin: 1rem 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: #a0a0a0;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Sections */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-left: 5px solid #d4af37;
+            border-radius: 0;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: #d4af37;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #666;
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            color: #d4af37;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Histoire */
+        .histoire-texte {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #c0c0c0;
+            margin: 1.5rem 0;
+            border-left: 3px solid #888;
+            padding-left: 1.5rem;
+        }
+
+        /* Hiérarchie */
+        .hierarchy {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .role {
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            padding: 1.5rem;
+            border: 2px solid #444;
+            border-left: 5px solid #d4af37;
+            transition: all 0.3s ease;
+        }
+
+        .role:hover {
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
+            border-color: #d4af37;
+            transform: translateX(10px);
+        }
+
+        .role-titre {
+            font-size: 1.4rem;
+            color: #d4af37;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .role-description {
+            color: #a0a0a0;
+            font-size: 1rem;
+        }
+
+        /* Système de Cotisation */
+        .cotisation-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .cotisation-box {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(100, 100, 100, 0.05) 100%);
+            border: 2px solid #444;
+            padding: 1.5rem;
+            border-radius: 0;
+            text-align: center;
+        }
+
+        .cotisation-box.active {
+            border: 2px solid #d4af37;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(100, 100, 100, 0.05) 100%);
+        }
+
+        .cotisation-titre {
+            font-size: 1.3rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .cotisation-details {
+            color: #a0a0a0;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .cotisation-requirement {
+            background: rgba(0, 0, 0, 0.5);
+            border-left: 3px solid #d4af37;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: left;
+            color: #d4af37;
+            font-weight: bold;
+        }
+
+        /* Règles */
+        .rules-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .rule-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-left: 4px solid #d4af37;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .rule-number {
+            color: #d4af37;
+            font-weight: bold;
+            font-size: 1.2rem;
+            min-width: 40px;
+        }
+
+        /* Contact */
+        .contact-info {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            border: 2px solid #d4af37;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .contact-info p {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+            color: #d4af37;
+        }
+
+        .discord-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.8rem 2rem;
+            background: #5865F2;
+            color: white;
+            text-decoration: none;
+            border-radius: 0;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .discord-link:hover {
+            background: #4752C4;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0a0a;
+            border-top: 3px solid #d4af37;
+            padding: 2rem;
+            text-align: center;
+            color: #888;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            margin: 0.5rem 0;
+        }
+
+        .footer-year {
+            color: #d4af37;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero {
+                height: 400px;
+            }
+
+            .hero-logo {
+                width: 200px;
+                height: 200px;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        section {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .role, .cotisation-box, .rule-item {
+            animation: fadeInUp 0.8s ease-out;
+        }
+    </style>
 </head>
 <body>
-
-<!-- ═══════════════════════════════════════ HERO -->
-<div class="hero">
-  <div class="hero-emblem">🦅</div>
-  <h1 class="hero-title">THE FALCONS</h1>
-  <div class="hero-line"></div>
-  <p class="hero-subtitle">Organisation Criminelle Américaine — Fondée dans l'ombre, forgée dans le sang</p>
-  <span class="hero-tagline">Loyauté • Silence • Puissance</span>
-  <div class="scroll-hint">
-    <span>ENTRER</span>
-    <div class="scroll-arrow"></div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════ NAV -->
-<nav>
-  <div class="nav-inner">
-    <a href="#" class="nav-logo">🦅 THE FALCONS</a>
-    <div class="nav-links">
-      <a href="#histoire">Histoire</a>
-      <a href="#hierarchie">Hiérarchie</a>
-      <a href="#rdv">Rendez-Vous</a>
-      <a href="#reunion">Réunions</a>
-      <a href="#apprentissage">Apprentissage</a>
-    </div>
-  </div>
-</nav>
-
-<!-- ═══════════════════════════════════════ HISTOIRE -->
-<div id="histoire" style="background: linear-gradient(180deg, var(--darker) 0%, #0d0505 50%, var(--darker) 100%);">
-<section>
-  <div class="section-header">
-    <span class="section-number">— I —</span>
-    <h2 class="section-title">Notre Histoire</h2>
-    <div class="section-divider"></div>
-  </div>
-
-  <div class="story-block">
-    <p class="story-para">
-      Dans les années 1970, au cœur des rues de <strong>Chicago</strong>, une poignée d'hommes brisés par la pauvreté et abandonnés par un système corrompu décidèrent de tracer leur propre chemin. Ils se baptisèrent <strong>The Falcons</strong> — le faucon, prédateur silencieux, rapide, implacable. Un oiseau qui ne perd jamais sa proie de vue.
-    </p>
-    <p class="story-para">
-      Fondée par le légendaire <strong>Vincent "Iron Wing" Malone</strong>, l'organisation grandit dans l'ombre des grandes familles mafieuses de la côte Est, évitant les projecteurs tout en tissant un réseau d'influence tentaculaire à travers les États-Unis. Là où d'autres organisations sombrent dans la flamboyance, <strong>The Falcons restent dans l'obscurité</strong>.
-    </p>
-    <p class="story-para">
-      Décennie après décennie, l'organisation survécut à des guerres de territoires, des trahisons internes et la pression des fédéraux. Chaque épreuve forgea davantage l'acier de la hiérarchie, renforçant un <strong>code d'honneur</strong> immuable : la loyauté envers l'organisation prime sur tout — famille, argent, et vie elle-même.
-    </p>
-    <p class="story-para">
-      Aujourd'hui, <strong>The Falcons</strong> opèrent dans l'ombre de plusieurs grandes villes américaines. Ils ne se montrent pas. Ils ne fanfaronnent pas. Mais tout le monde, dans les rues, sait que quand un faucon fond sur sa cible... <strong>il ne rate jamais</strong>.
-    </p>
-  </div>
-</section>
-</div>
-
-<div class="sep"></div>
-
-<!-- ═══════════════════════════════════════ HIERARCHIE -->
-<section id="hierarchie">
-  <div class="section-header">
-    <span class="section-number">— II —</span>
-    <h2 class="section-title">La Hiérarchie</h2>
-    <div class="section-divider"></div>
-    <p class="section-intro">L'ordre, la discipline et la chaîne de commandement sont les piliers de notre organisation. Chaque rang a ses devoirs. Chaque devoir a son prix.</p>
-  </div>
-
-  <div class="hierarchy-stack">
-
-    <!-- CHEF -->
-    <div class="rank-card rank-1">
-      <div class="rank-inner">
-        <div class="rank-badge">
-          <span class="rank-icon">👑</span>
-          <span class="rank-level">Rang Suprême</span>
-        </div>
-        <div class="rank-name">Le Chef — The Boss</div>
-        <ul class="rank-duties">
-          <li>Autorité absolue et incontestée sur l'ensemble de l'organisation.</li>
-          <li>Prend toutes les décisions stratégiques majeures concernant les opérations et les alliances.</li>
-          <li>Approuve ou refuse toute promotion au sein de la hiérarchie.</li>
-          <li>Protège l'honneur et l'intégrité des Falcons en toutes circonstances.</li>
-          <li>Représente l'organisation face aux autres familles et entités extérieures.</li>
-          <li>Sa parole est loi. Son silence est un ordre.</li>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo-nav">Los Blanco Vatos</div>
+        <ul>
+            <li><a href="#histoire">Histoire</a></li>
+            <li><a href="#hierarchy">Hiérarchie</a></li>
+            <li><a href="#cotisation">Cotisation</a></li>
+            <li><a href="#regles">Règles</a></li>
+            <li><a href="#contact">Contact</a></li>
         </ul>
-      </div>
-    </div>
+    </nav>
 
-    <div class="connector"></div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <img src="VOTRE_URL_IMAGE_ICI" alt="Logo Los Blanco Vatos" class="hero-logo">
+        <h1>Los Blanco Vatos</h1>
+        <p>Diamond City - Depuis 1974</p>
+    </section>
 
-    <!-- HAUTS GRADÉS -->
-    <div class="rank-card rank-2">
-      <div class="rank-inner">
-        <div class="rank-badge">
-          <span class="rank-icon">🦅</span>
-          <span class="rank-level">Commandement</span>
-        </div>
-        <div class="rank-name">Les Hauts Gradés — Underbosses & Capos</div>
-        <ul class="rank-duties">
-          <li>Bras droit du Chef, ils relaient les ordres et supervisent les opérations quotidiennes.</li>
-          <li>Gèrent et encadrent les équipes de membres confirmés et non-confirmés.</li>
-          <li>Organisent et programment les rendez-vous officiels au nom de l'organisation.</li>
-          <li>Recrutent, forment et évaluent les nouveaux membres.</li>
-          <li>Rapportent directement au Chef tout incident, problème ou opportunité.</li>
-          <li>Maintiennent la discipline au sein des rangs inférieurs.</li>
-        </ul>
-      </div>
-    </div>
+    <!-- Conteneur Principal -->
+    <div class="container">
+        <!-- Histoire -->
+        <section id="histoire">
+            <h2>Notre Histoire</h2>
+            <div class="histoire-texte">
+                <p>
+                    Los Blanco Vatos est bien plus qu'un simple gang. Nous sommes une famille, une fratrie unie par le destin et la résilience. 
+                    Fondés en 1974 à Diamond City, nous rassemblons des enfants et des jeunes réfugiés venus de tous les coins du monde, 
+                    fuyant la pauvreté, la violence et l'injustice.
+                </p>
+            </div>
+            <div class="histoire-texte">
+                <p>
+                    Chacun de nos membres a une histoire de souffrance, de lutte et d'espoir. Certains ont traversé des océans, d'autres ont grandi 
+                    dans les rues. Mais ensemble, nous avons trouvé un sens, une protection et une dignité. Los Blanco Vatos représente l'unité, 
+                    l'honneur et la solidarité face aux épreuves.
+                </p>
+            </div>
+            <div class="histoire-texte">
+                <p>
+                    Ce n'est pas une vie facile que nous menons. C'est une vie de sacrifices, de devoirs et de responsabilités envers nos frères. 
+                    Nous croyons que chacun mérite une chance, une famille, et une place où il peut se sentir protégé. Los Blanco Vatos, c'est ça : 
+                    être là les uns pour les autres, toujours.
+                </p>
+            </div>
+        </section>
 
-    <div class="connector"></div>
+        <!-- Hiérarchie -->
+        <section id="hierarchy">
+            <h2>Hiérarchie et Rôles</h2>
+            <p style="margin-bottom: 2rem; color: #a0a0a0;">
+                Notre structure organisée garantit l'ordre, la discipline et la cohésion du gang. Chaque rôle porte des responsabilités et des privilèges correspondants.
+            </p>
 
-    <!-- MEMBRES CONFIRMÉS -->
-    <div class="rank-card rank-3">
-      <div class="rank-inner">
-        <div class="rank-badge">
-          <span class="rank-icon">⚔️</span>
-          <span class="rank-level">Corps de l'organisation</span>
-        </div>
-        <div class="rank-name">Membres Confirmés — Made Men</div>
-        <ul class="rank-duties">
-          <li>Ont prouvé leur loyauté absolue envers les Falcons à travers épreuves et missions.</li>
-          <li>Participent pleinement aux opérations officielles de l'organisation.</li>
-          <li>Peuvent encadrer et guider les membres non-confirmés sous leur responsabilité.</li>
-          <li>Bénéficient de la protection totale de l'organisation.</li>
-          <li>Ont le droit de vote lors des délibérations internes importantes.</li>
-          <li>Doivent répondre présent à chaque convocation, sans exception ni excuse.</li>
-        </ul>
-      </div>
-    </div>
+            <div class="hierarchy">
+                <div class="role">
+                    <div class="role-titre">👑 Chef du Gang (Jefe)</div>
+                    <div class="role-description">
+                        Le leader suprême de Los Blanco Vatos. Il prend les grandes décisions stratégiques, gère les ressources, représente le gang auprès 
+                        d'autres organisations et assure la vision long terme du groupe. Le Chef doit être respecté et craint.
+                    </div>
+                </div>
 
-    <div class="connector"></div>
+                <div class="role">
+                    <div class="role-titre">⚔️ Sous-Chef (Segundo)</div>
+                    <div class="role-description">
+                        Le bras droit du Chef. Il gère les opérations quotidiennes, supervise les membres officiels, arbitre les conflits internes et 
+                        prend les décisions en l'absence du Chef. C'est un rôle de responsabilité et de leadership.
+                    </div>
+                </div>
 
-    <!-- MEMBRES NON CONFIRMÉS -->
-    <div class="rank-card rank-4">
-      <div class="rank-inner">
-        <div class="rank-badge">
-          <span class="rank-icon">🌑</span>
-          <span class="rank-level">En cours d'intégration</span>
-        </div>
-        <div class="rank-name">Membres Non-Confirmés — Associates</div>
-        <ul class="rank-duties">
-          <li>Nouveaux entrants sous la tutelle directe d'un Haut Gradé ou Membre Confirmé.</li>
-          <li>Doivent suivre leur période d'apprentissage avec sérieux et discipline.</li>
-          <li>Exécutent les tâches et missions assignées par leurs supérieurs sans rechigner.</li>
-          <li>N'ont pas encore accès aux secrets et opérations sensibles de l'organisation.</li>
-          <li>Doivent prouver leur valeur, leur discrétion et leur loyauté pour progresser.</li>
-          <li>Ont l'obligation de respecter scrupuleusement la chaîne de commandement.</li>
-        </ul>
-      </div>
-    </div>
+                <div class="role">
+                    <div class="role-titre">🔑 Membre Officiel (Hermano Oficial)</div>
+                    <div class="role-description">
+                        Un statut acquis par le mérite et le dévouement. Les membres officiels jouissent d'une pleine protection, de privilèges et 
+                        d'une voix dans les décisions importantes du gang. Ils doivent cotiser régulièrement pour maintenir leur statut.
+                    </div>
+                </div>
 
-  </div>
-</section>
+                <div class="role">
+                    <div class="role-titre">🌱 Membre Non-Officiel (Aspirante)</div>
+                    <div class="role-description">
+                        Les nouveaux venus ou ceux en période de probation. Ils travaillent dur pour prouver leur loyauté et leur courage. 
+                        C'est une période cruciale pour démontrer qu'ils méritent d'intégrer complètement la famille.
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<div class="sep"></div>
+        <!-- Système de Cotisation -->
+        <section id="cotisation">
+            <h2>Système de Cotisation</h2>
+            <p style="margin-bottom: 2rem; color: #a0a0a0;">
+                Le système de cotisation (Speedo d'Acide) est la colonne vertébrale financière et organisationnelle de Los Blanco Vatos. 
+                C'est un engagement envers la famille et une contribution à sa prospérité.
+            </p>
 
-<!-- ═══════════════════════════════════════ RENDEZ-VOUS -->
-<section id="rdv" style="background: radial-gradient(ellipse at 50% 50%, rgba(139,26,26,0.05) 0%, transparent 70%);">
-  <div class="section-header">
-    <span class="section-number">— III —</span>
-    <h2 class="section-title">Rendez-Vous</h2>
-    <div class="section-divider"></div>
-  </div>
+            <div class="cotisation-container">
+                <!-- Membre Non-Officiel -->
+                <div class="cotisation-box">
+                    <div class="cotisation-titre">Aspirante (Non-Officiel)</div>
+                    <div class="cotisation-details">
+                        Pour devenir Membre Officiel et intégrer complètement Los Blanco Vatos
+                    </div>
+                    <div class="cotisation-requirement">
+                        <span style="color: #d4af37; font-size: 1.8rem;">3</span><br>
+                        Speedo d'Acide requis<br>
+                        <small style="color: #888;">Pour la promotion</small>
+                    </div>
+                    <p style="color: #888; font-size: 0.9rem;">
+                        Les membres non-officiels doivent compléter 3 Speedo d'Acide pour accéder au statut officiel. 
+                        Chaque Speedo complété rapporte des points de loyauté.
+                    </p>
+                </div>
 
-  <div class="info-card">
-    <span class="info-card-icon">🤝</span>
-    <div class="info-card-title">Protocole de Rendez-Vous Officiel</div>
-    <p>
-      Au sein des Falcons, aucune rencontre officielle ne se tient par hasard. Chaque rendez-vous est <strong>soigneusement planifié</strong> et doit passer par les voies hiérarchiques appropriées. C'est une question de sécurité, de respect, et d'ordre.
-    </p>
-    <p>
-      Pour solliciter un rendez-vous officiel avec l'organisation — que ce soit pour une affaire, une négociation, une intégration ou tout autre motif —, vous devez <strong>contacter directement un Haut Gradé en jeu</strong>. Celui-ci sera chargé d'évaluer votre demande, de la transmettre si nécessaire, et de programmer la rencontre selon les disponibilités et priorités de l'organisation.
-    </p>
-    <p>
-      <strong>Aucune demande de rendez-vous ne sera traitée par voie informelle.</strong> Les Falcons ne font pas dans l'improvisation. Respectez le protocole, et vous serez reçu avec les égards qui s'imposent.
-    </p>
-    <div class="warning-box">
-      ⚠ Toute tentative de contacter directement le Chef sans passer par un Haut Gradé sera considérée comme un manque de respect grave envers la chaîne de commandement.
-    </div>
-  </div>
-</section>
+                <!-- Membre Officiel -->
+                <div class="cotisation-box active">
+                    <div class="cotisation-titre">Hermano Oficial</div>
+                    <div class="cotisation-details">
+                        Engagement permanent envers Los Blanco Vatos
+                    </div>
+                    <div class="cotisation-requirement">
+                        <span style="color: #d4af37; font-size: 1.8rem;">2</span><br>
+                        Speedo d'Acide par semaine<br>
+                        <small style="color: #888;">Maintien du statut</small>
+                    </div>
+                    <p style="color: #888; font-size: 0.9rem;">
+                        Une fois officiel, vous devez fournir 2 Speedo d'Acide par semaine minimum. Le reste des revenus 
+                        vous appartient. Les preuves doivent être envoyées au Discord.
+                    </p>
+                </div>
 
-<div class="sep"></div>
+                <!-- Cas de Non-Respect -->
+                <div class="cotisation-box">
+                    <div class="cotisation-titre">⚠️ Sanctions</div>
+                    <div class="cotisation-details">
+                        Conséquences du non-respect des obligations
+                    </div>
+                    <div class="cotisation-requirement" style="border-color: #c44545; color: #ff6b6b;">
+                        Manquement = Renvoi<br>
+                        <small style="color: #999;">Ou pire</small>
+                    </div>
+                    <p style="color: #888; font-size: 0.9rem;">
+                        Si un membre ne respecte pas ses quotas de Speedo, des avertissements seront donnés. 
+                        Les récidives entraîneront un renvoi du gang.
+                    </p>
+                </div>
+            </div>
 
-<!-- ═══════════════════════════════════════ RÉUNIONS -->
-<section id="reunion">
-  <div class="section-header">
-    <span class="section-number">— IV —</span>
-    <h2 class="section-title">Réunions</h2>
-    <div class="section-divider"></div>
-  </div>
-
-  <div class="info-card">
-    <span class="info-card-icon">📋</span>
-    <div class="info-card-title">Convocations & Assemblées</div>
-    <p>
-      Les réunions officielles des Falcons sont des moments <strong>sacrés et incontournables</strong>. Elles permettent à l'organisation de maintenir sa cohésion, de planifier ses opérations et de traiter les affaires internes importantes.
-    </p>
-    <p>
-      <strong>Toutes les annonces de réunion sont publiées sur notre serveur Discord officiel.</strong> C'est le canal de communication principal de l'organisation pour les convocations, les avis urgents et les informations importantes. Il est de votre devoir, en tant que membre, de surveiller régulièrement les annonces.
-    </p>
-    <p>
-      La participation aux réunions est <strong>obligatoire</strong> pour tous les membres confirmés et fortement recommandée pour les membres en cours d'intégration. Une absence non-justifiée à une réunion convoquée par le Chef ou un Haut Gradé peut entraîner des conséquences disciplinaires.
-    </p>
-    <div class="discord-badge">
-      <span>💬</span>
-      <span>Rejoignez notre Discord pour ne manquer aucune annonce</span>
-    </div>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- ═══════════════════════════════════════ APPRENTISSAGE -->
-<section id="apprentissage">
-  <div class="section-header">
-    <span class="section-number">— V —</span>
-    <h2 class="section-title">Apprentissage</h2>
-    <div class="section-divider"></div>
-    <p class="section-intro">Personne ne naît Falcon. On le devient, par le travail, l'écoute, et la loyauté. Voici le chemin qui mène à l'intégration complète au sein de notre organisation.</p>
-  </div>
-
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">01</div>
-      <div class="step-content">
-        <h3>Prise de Contact</h3>
-        <p>Tout aspirant souhaitant rejoindre les Falcons doit d'abord se faire remarquer et <strong>entrer en contact avec un Haut Gradé en jeu</strong>. C'est lui, et lui seul, qui décide d'accepter ou non de prendre un nouveau membre sous son aile.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <div class="step-content">
-        <h3>La Phase d'Initiation</h3>
-        <p>Le Haut Gradé tuteur prendra le temps de <strong>vous montrer comment fonctionner au sein de l'organisation</strong> : les codes, les protocoles, les règles, les zones d'opération et tout ce que vous devez savoir pour évoluer correctement dans notre monde.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">03</div>
-      <div class="step-content">
-        <h3>Mise en Pratique</h3>
-        <p>Durant votre période en tant que membre non-confirmé, vous serez <strong>mis à l'épreuve sur le terrain</strong>. Vous devrez démontrer vos capacités, votre discipline, votre discrétion et surtout votre loyauté envers l'organisation et vos supérieurs.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">04</div>
-      <div class="step-content">
-        <h3>Évaluation & Promotion</h3>
-        <p>Lorsque votre tuteur et les Hauts Gradés estiment que vous avez fait vos preuves, <strong>votre passage au rang de Membre Confirmé</strong> sera soumis à validation. Cette décision appartient au Chef. Ce n'est pas une étape que l'on réclame — c'est une reconnaissance que l'on mérite.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="info-card" style="margin-top: 2rem;">
-    <p>
-      <em>Rappel :</em> Le chemin vers l'intégration complète n'a pas de durée fixe. <strong>Certains progressent vite, d'autres prennent leur temps.</strong> Ce qui compte, c'est la qualité, pas la vitesse. Les Falcons ne recrutent pas des chiffres — ils forment des hommes et des femmes de confiance.
-    </p>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════ FOOTER -->
-<footer>
-  <div class="footer-logo">🦅 THE FALCONS</div>
-  <div class="footer-sub">Organisation Criminelle Américaine</div>
-  <p class="footer-note">"Dans l'ombre, nous régnons. Dans le silence, nous frappons."</p>
-</footer>
-
-</body>
-</html>
+            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(0, 0, 0, 0.5); border-left: 4px solid #d4af37;">
+                <h3 style="margin-top: 0;">📋 Processus de Vérification</h3>
+                <p style="color: #a0a0a0; margin: 1rem 0;">
+                    ✓ Chaque Speedo d'Acide doit être documenté avec une preuve<br>
+                    ✓ Les preuves doivent être envoyées au Discord (canal #cotisations)<br>
+                    ✓ Un vérificateur officiel confirmera l'authenticité<br>
+                    ✓ Les revenus supplémentaires au-delà du quota appartiennent au membre
+                </p>
+            </div>
+        </section>
