@@ -1,510 +1,1039 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Los Blanco Vatos - Diamond City</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Los Blanco Vatos</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --white: #f0ece4;
+    --off-white: #d9d4c9;
+    --light-gray: #a8a8a8;
+    --mid-gray: #5a5a5a;
+    --dark-gray: #1a1a1a;
+    --black: #080808;
+    --accent: #c8b97a;
+    --accent-dim: rgba(200,185,122,0.3);
+    --glass: rgba(255,255,255,0.03);
+  }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #0a0a0a;
-            color: #e0e0e0;
-            line-height: 1.6;
-        }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* Navigation */
-        nav {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 3px solid #d4af37;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+  html { scroll-behavior: smooth; }
 
-        .logo-nav {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #d4af37;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Crimson Text', serif;
+    font-size: 18px;
+    overflow-x: hidden;
+    cursor: none;
+  }
 
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--white);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, background 0.2s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(200,185,122,0.6);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.2s, height 0.2s, opacity 0.2s;
+  }
 
-        nav a {
-            color: #e0e0e0;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
 
-        nav a:hover {
-            color: #d4af37;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-        }
+  /* NAVBAR */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 60px;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.98), transparent);
+    transition: padding 0.3s;
+  }
+  nav.scrolled {
+    background: rgba(8,8,8,0.97);
+    padding: 14px 60px;
+    border-bottom: 1px solid rgba(200,185,122,0.15);
+  }
+  .nav-logo {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-shadow: 0 0 20px rgba(200,185,122,0.3);
+  }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--light-gray);
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--accent);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-links a:hover::after { width: 100%; }
 
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23000" width="1200" height="600"/></svg>');
-            background-size: cover;
-            background-position: center;
-            height: 600px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            border-bottom: 5px solid #d4af37;
-        }
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    padding: 120px 40px 80px;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 60%, rgba(40,40,40,0.7) 0%, transparent 70%),
+      radial-gradient(ellipse 30% 30% at 20% 20%, rgba(200,185,122,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 30% 30% at 80% 80%, rgba(200,185,122,0.04) 0%, transparent 60%);
+  }
+  .hero-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
+  }
+  .hero-emblem {
+    width: 180px;
+    height: 180px;
+    margin-bottom: 40px;
+    position: relative;
+    animation: emblemFloat 6s ease-in-out infinite;
+    opacity: 0;
+    animation: emblemReveal 1.4s 0.3s forwards, emblemFloat 6s 1.7s ease-in-out infinite;
+  }
+  @keyframes emblemReveal {
+    0% { opacity: 0; transform: scale(0.7) rotate(-10deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+  @keyframes emblemFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+  }
+  .hero-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2.4rem, 7vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: 0.05em;
+    background: linear-gradient(135deg, #ffffff 0%, #d9d4c9 40%, #c8b97a 70%, #f0ece4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0;
+    animation: slideUp 1s 0.6s ease forwards;
+    text-shadow: none;
+  }
+  .hero-sub {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.5em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-top: 18px;
+    opacity: 0;
+    animation: slideUp 1s 0.9s ease forwards;
+  }
+  .hero-divider {
+    width: 160px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 30px auto;
+    opacity: 0;
+    animation: fadeIn 1s 1.1s forwards;
+  }
+  .hero-tagline {
+    font-style: italic;
+    color: var(--light-gray);
+    font-size: 1.1rem;
+    max-width: 500px;
+    opacity: 0;
+    animation: slideUp 1s 1.2s ease forwards;
+  }
+  @keyframes slideUp {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--mid-gray);
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    opacity: 0;
+    animation: fadeIn 1s 2s forwards;
+  }
+  .scroll-arrow {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--mid-gray), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.3); }
+  }
 
-        .hero-logo {
-            width: 300px;
-            height: 300px;
-            margin-bottom: 2rem;
-            object-fit: contain;
-            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.3));
-            animation: float 3s ease-in-out infinite;
-        }
+  /* SECTIONS COMMON */
+  section {
+    position: relative;
+    padding: 120px 60px;
+  }
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.5em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .section-label::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+    display: block;
+  }
+  .section-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 50px;
+    line-height: 1.2;
+  }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
+  /* FADE IN ANIMATION */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .fade-in-delay-1 { transition-delay: 0.1s; }
+  .fade-in-delay-2 { transition-delay: 0.2s; }
+  .fade-in-delay-3 { transition-delay: 0.3s; }
+  .fade-in-delay-4 { transition-delay: 0.4s; }
+  .fade-in-delay-5 { transition-delay: 0.5s; }
 
-        .hero h1 {
-            font-size: 4rem;
-            font-weight: bold;
-            color: #d4af37;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
-            margin: 1rem 0;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
+  /* HISTOIRE */
+  #histoire {
+    background: linear-gradient(180deg, var(--black) 0%, #0d0d0d 100%);
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .histoire-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 70px;
+    align-items: start;
+  }
+  .histoire-text p {
+    color: var(--off-white);
+    line-height: 1.9;
+    font-size: 1.05rem;
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+  .histoire-text p:first-child::first-letter {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    float: left;
+    line-height: 0.75;
+    margin: 8px 12px 0 0;
+    color: var(--accent);
+  }
+  .histoire-aside {
+    position: sticky;
+    top: 120px;
+  }
+  .quote-block {
+    border-left: 2px solid var(--accent);
+    padding: 24px 32px;
+    background: rgba(200,185,122,0.04);
+    margin-bottom: 30px;
+  }
+  .quote-block blockquote {
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--off-white);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+  .quote-block cite {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .timeline-item {
+    display: flex;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .timeline-item:last-child { border-bottom: none; }
+  .timeline-year {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    min-width: 60px;
+    padding-top: 2px;
+  }
+  .timeline-desc {
+    color: var(--light-gray);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
 
-        .hero p {
-            font-size: 1.5rem;
-            color: #a0a0a0;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
-        }
+  /* HIERARCHIE */
+  #hierarchie {
+    background: #0a0a0a;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .ranks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
+  }
+  .rank-row {
+    display: grid;
+    grid-template-columns: 80px 200px 1fr auto;
+    align-items: center;
+    gap: 30px;
+    padding: 32px 40px;
+    background: var(--black);
+    transition: background 0.3s, transform 0.3s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  .rank-row::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    background: linear-gradient(90deg, var(--accent-dim), transparent);
+    transition: width 0.4s ease;
+  }
+  .rank-row:hover::before { width: 100%; }
+  .rank-row:hover { transform: translateX(4px); }
+  .rank-number {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+    transition: color 0.3s;
+  }
+  .rank-row:hover .rank-number { color: rgba(200,185,122,0.15); }
+  .rank-badge {
+    display: flex;
+    flex-direction: column;
+  }
+  .rank-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    color: var(--white);
+    text-transform: uppercase;
+  }
+  .rank-title-es {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-top: 4px;
+  }
+  .rank-desc {
+    color: var(--mid-gray);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    transition: color 0.3s;
+  }
+  .rank-row:hover .rank-desc { color: var(--light-gray); }
+  .rank-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+  .rank-row:hover .rank-icon { opacity: 1; }
+  .rank-row.jefe { border-left: 3px solid var(--accent); }
+  .rank-row.second { border-left: 3px solid var(--light-gray); }
+  .rank-row.officiel { border-left: 3px solid var(--mid-gray); }
+  .rank-row.membre { border-left: 3px solid rgba(90,90,90,0.4); }
 
-        /* Sections */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-        }
+  /* TRAVAIL */
+  #travail {
+    background: linear-gradient(180deg, #0a0a0a 0%, var(--black) 100%);
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .missions-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 50px;
+  }
+  .mission-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 36px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  }
+  .mission-card:hover {
+    border-color: rgba(200,185,122,0.25);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .mission-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(200,185,122,0.06), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .mission-card:hover::after { opacity: 1; }
+  .mission-card-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .mission-card h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+  .mission-card p {
+    color: var(--mid-gray);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    transition: color 0.3s;
+  }
+  .mission-card:hover p { color: var(--light-gray); }
+  .mission-card .mission-number {
+    position: absolute;
+    bottom: 20px;
+    right: 24px;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 5rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.025);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .progression-block {
+    background: rgba(200,185,122,0.04);
+    border: 1px solid rgba(200,185,122,0.12);
+    padding: 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .progression-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+  .progression-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+  .steps-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 30px;
+  }
+  .step-box {
+    flex: 1;
+    text-align: center;
+    padding: 22px 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .step-box:hover {
+    background: rgba(200,185,122,0.06);
+    border-color: rgba(200,185,122,0.2);
+  }
+  .step-box .step-num {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .step-box .step-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--white);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .step-box .step-desc {
+    font-size: 0.85rem;
+    color: var(--mid-gray);
+    line-height: 1.5;
+  }
+  .step-arrow {
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .weekly-rule {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    background: rgba(255,255,255,0.02);
+    border-left: 2px solid var(--accent);
+    padding: 20px 24px;
+    margin-top: 10px;
+  }
+  .weekly-rule-icon {
+    font-size: 1.8rem;
+    line-height: 1;
+  }
+  .weekly-rule-text h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    color: var(--white);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .weekly-rule-text p {
+    color: var(--mid-gray);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
 
-        section {
-            margin: 3rem 0;
-            padding: 2rem;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border-left: 5px solid #d4af37;
-            border-radius: 0;
-        }
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding: 60px;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.4rem;
+    color: var(--accent);
+    margin-bottom: 12px;
+    text-shadow: 0 0 30px rgba(200,185,122,0.2);
+  }
+  .footer-tagline {
+    font-style: italic;
+    color: var(--mid-gray);
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+  }
+  .footer-divider {
+    width: 60px;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    margin: 0 auto 20px;
+  }
+  .footer-copy {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: rgba(90,90,90,0.7);
+    text-transform: uppercase;
+  }
 
-        h2 {
-            font-size: 2.5rem;
-            color: #d4af37;
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-bottom: 2px solid #666;
-            padding-bottom: 0.5rem;
-        }
+  /* SECTION DIVIDERS */
+  .ornament {
+    text-align: center;
+    margin: 0 0 50px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .ornament-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,185,122,0.2), transparent);
+  }
+  .ornament-symbol {
+    color: var(--accent);
+    font-size: 1rem;
+    opacity: 0.6;
+  }
 
-        h3 {
-            color: #d4af37;
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav { padding: 18px 24px; }
+    nav.scrolled { padding: 12px 24px; }
+    .nav-links { gap: 20px; }
+    .nav-links a { font-size: 0.65rem; }
+    section { padding: 80px 24px; }
+    .histoire-grid { grid-template-columns: 1fr; }
+    .histoire-aside { position: static; }
+    .rank-row { grid-template-columns: 50px 1fr; grid-template-rows: auto auto; gap: 10px; padding: 24px; }
+    .rank-icon { display: none; }
+    .rank-desc { grid-column: 1 / -1; }
+    .missions-layout { grid-template-columns: 1fr; }
+    .steps-row { flex-direction: column; }
+    .step-arrow { transform: rotate(90deg); }
+  }
 
-        /* Histoire */
-        .histoire-texte {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #c0c0c0;
-            margin: 1.5rem 0;
-            border-left: 3px solid #888;
-            padding-left: 1.5rem;
-        }
-
-        /* Hiérarchie */
-        .hierarchy {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .role {
-            background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
-            padding: 1.5rem;
-            border: 2px solid #444;
-            border-left: 5px solid #d4af37;
-            transition: all 0.3s ease;
-        }
-
-        .role:hover {
-            background: linear-gradient(90deg, rgba(212, 175, 55, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
-            border-color: #d4af37;
-            transform: translateX(10px);
-        }
-
-        .role-titre {
-            font-size: 1.4rem;
-            color: #d4af37;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-        }
-
-        .role-description {
-            color: #a0a0a0;
-            font-size: 1rem;
-        }
-
-        /* Système de Cotisation */
-        .cotisation-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .cotisation-box {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(100, 100, 100, 0.05) 100%);
-            border: 2px solid #444;
-            padding: 1.5rem;
-            border-radius: 0;
-            text-align: center;
-        }
-
-        .cotisation-box.active {
-            border: 2px solid #d4af37;
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(100, 100, 100, 0.05) 100%);
-        }
-
-        .cotisation-titre {
-            font-size: 1.3rem;
-            color: #d4af37;
-            margin-bottom: 1rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .cotisation-details {
-            color: #a0a0a0;
-            line-height: 1.8;
-            margin-bottom: 1rem;
-        }
-
-        .cotisation-requirement {
-            background: rgba(0, 0, 0, 0.5);
-            border-left: 3px solid #d4af37;
-            padding: 1rem;
-            margin: 1rem 0;
-            text-align: left;
-            color: #d4af37;
-            font-weight: bold;
-        }
-
-        /* Règles */
-        .rules-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .rule-item {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1rem;
-            border-left: 4px solid #d4af37;
-            display: flex;
-            gap: 1rem;
-        }
-
-        .rule-number {
-            color: #d4af37;
-            font-weight: bold;
-            font-size: 1.2rem;
-            min-width: 40px;
-        }
-
-        /* Contact */
-        .contact-info {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 1.5rem;
-            border: 2px solid #d4af37;
-            margin: 1.5rem 0;
-            text-align: center;
-        }
-
-        .contact-info p {
-            font-size: 1.2rem;
-            margin: 0.5rem 0;
-            color: #d4af37;
-        }
-
-        .discord-link {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.8rem 2rem;
-            background: #5865F2;
-            color: white;
-            text-decoration: none;
-            border-radius: 0;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .discord-link:hover {
-            background: #4752C4;
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
-        }
-
-        /* Footer */
-        footer {
-            background: #0a0a0a;
-            border-top: 3px solid #d4af37;
-            padding: 2rem;
-            text-align: center;
-            color: #888;
-            margin-top: 3rem;
-        }
-
-        footer p {
-            margin: 0.5rem 0;
-        }
-
-        .footer-year {
-            color: #d4af37;
-            font-weight: bold;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            nav ul {
-                flex-direction: column;
-                gap: 1rem;
-                width: 100%;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero {
-                height: 400px;
-            }
-
-            .hero-logo {
-                width: 200px;
-                height: 200px;
-            }
-
-            h2 {
-                font-size: 1.8rem;
-            }
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        section {
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .role, .cotisation-box, .rule-item {
-            animation: fadeInUp 0.8s ease-out;
-        }
-    </style>
+  /* Page loader */
+  .page-loader {
+    position: fixed;
+    inset: 0;
+    background: var(--black);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    animation: loaderFadeOut 0.6s 1.8s forwards;
+  }
+  @keyframes loaderFadeOut {
+    to { opacity: 0; pointer-events: none; }
+  }
+  .loader-text {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.1rem;
+    color: var(--accent);
+    animation: loaderPulse 1.5s ease-in-out infinite;
+    letter-spacing: 0.15em;
+  }
+  @keyframes loaderPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+  .loader-bar {
+    width: 200px;
+    height: 1px;
+    background: rgba(200,185,122,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  .loader-bar::after {
+    content: '';
+    position: absolute;
+    left: -100%;
+    top: 0; bottom: 0;
+    width: 100%;
+    background: var(--accent);
+    animation: loaderSlide 1.6s ease forwards;
+  }
+  @keyframes loaderSlide {
+    to { left: 100%; }
+  }
+</style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="logo-nav">Los Blanco Vatos</div>
-        <ul>
-            <li><a href="#histoire">Histoire</a></li>
-            <li><a href="#hierarchy">Hiérarchie</a></li>
-            <li><a href="#cotisation">Cotisation</a></li>
-            <li><a href="#regles">Règles</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <img src="VOTRE_URL_IMAGE_ICI" alt="Logo Los Blanco Vatos" class="hero-logo">
-        <h1>Los Blanco Vatos</h1>
-        <p>Diamond City - Depuis 1974</p>
-    </section>
+<!-- Page Loader -->
+<div class="page-loader">
+  <div class="loader-text">LOS BLANCO VATOS</div>
+  <div class="loader-bar"></div>
+</div>
 
-    <!-- Conteneur Principal -->
-    <div class="container">
-        <!-- Histoire -->
-        <section id="histoire">
-            <h2>Notre Histoire</h2>
-            <div class="histoire-texte">
-                <p>
-                    Los Blanco Vatos est bien plus qu'un simple gang. Nous sommes une famille, une fratrie unie par le destin et la résilience. 
-                    Fondés en 1974 à Diamond City, nous rassemblons des enfants et des jeunes réfugiés venus de tous les coins du monde, 
-                    fuyant la pauvreté, la violence et l'injustice.
-                </p>
-            </div>
-            <div class="histoire-texte">
-                <p>
-                    Chacun de nos membres a une histoire de souffrance, de lutte et d'espoir. Certains ont traversé des océans, d'autres ont grandi 
-                    dans les rues. Mais ensemble, nous avons trouvé un sens, une protection et une dignité. Los Blanco Vatos représente l'unité, 
-                    l'honneur et la solidarité face aux épreuves.
-                </p>
-            </div>
-            <div class="histoire-texte">
-                <p>
-                    Ce n'est pas une vie facile que nous menons. C'est une vie de sacrifices, de devoirs et de responsabilités envers nos frères. 
-                    Nous croyons que chacun mérite une chance, une famille, et une place où il peut se sentir protégé. Los Blanco Vatos, c'est ça : 
-                    être là les uns pour les autres, toujours.
-                </p>
-            </div>
-        </section>
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-        <!-- Hiérarchie -->
-        <section id="hierarchy">
-            <h2>Hiérarchie et Rôles</h2>
-            <p style="margin-bottom: 2rem; color: #a0a0a0;">
-                Notre structure organisée garantit l'ordre, la discipline et la cohésion du gang. Chaque rôle porte des responsabilités et des privilèges correspondants.
-            </p>
+<!-- Navigation -->
+<nav id="navbar">
+  <div class="nav-logo">L.B.V</div>
+  <ul class="nav-links">
+    <li><a href="#histoire">Histoire</a></li>
+    <li><a href="#hierarchie">Hiérarchie</a></li>
+    <li><a href="#travail">Travail</a></li>
+  </ul>
+</nav>
 
-            <div class="hierarchy">
-                <div class="role">
-                    <div class="role-titre">👑 Chef du Gang (Jefe)</div>
-                    <div class="role-description">
-                        Le leader suprême de Los Blanco Vatos. Il prend les grandes décisions stratégiques, gère les ressources, représente le gang auprès 
-                        d'autres organisations et assure la vision long terme du groupe. Le Chef doit être respecté et craint.
-                    </div>
-                </div>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
 
-                <div class="role">
-                    <div class="role-titre">⚔️ Sous-Chef (Segundo)</div>
-                    <div class="role-description">
-                        Le bras droit du Chef. Il gère les opérations quotidiennes, supervise les membres officiels, arbitre les conflits internes et 
-                        prend les décisions en l'absence du Chef. C'est un rôle de responsabilité et de leadership.
-                    </div>
-                </div>
+  <!-- SVG Emblem -->
+  <div class="hero-emblem">
+    <svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" width="180" height="180">
+      <defs>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+        </filter>
+      </defs>
+      <!-- Outer ring -->
+      <circle cx="90" cy="90" r="84" fill="none" stroke="rgba(200,185,122,0.3)" stroke-width="1"/>
+      <circle cx="90" cy="90" r="78" fill="none" stroke="rgba(200,185,122,0.12)" stroke-width="0.5"/>
+      <!-- Diamond shape -->
+      <polygon points="90,16 164,90 90,164 16,90" fill="none" stroke="rgba(200,185,122,0.5)" stroke-width="1" filter="url(#glow)"/>
+      <!-- Inner diamond -->
+      <polygon points="90,36 144,90 90,144 36,90" fill="none" stroke="rgba(200,185,122,0.2)" stroke-width="0.8"/>
+      <!-- Cross lines -->
+      <line x1="90" y1="16" x2="90" y2="164" stroke="rgba(200,185,122,0.1)" stroke-width="0.5"/>
+      <line x1="16" y1="90" x2="164" y2="90" stroke="rgba(200,185,122,0.1)" stroke-width="0.5"/>
+      <!-- Center star -->
+      <polygon points="90,66 96,84 116,84 100,96 106,114 90,102 74,114 80,96 64,84 84,84" fill="rgba(200,185,122,0.15)" stroke="rgba(200,185,122,0.7)" stroke-width="1" filter="url(#glow)"/>
+      <!-- Corner dots -->
+      <circle cx="90" cy="20" r="2.5" fill="rgba(200,185,122,0.6)"/>
+      <circle cx="160" cy="90" r="2.5" fill="rgba(200,185,122,0.6)"/>
+      <circle cx="90" cy="160" r="2.5" fill="rgba(200,185,122,0.6)"/>
+      <circle cx="20" cy="90" r="2.5" fill="rgba(200,185,122,0.6)"/>
+      <!-- LBV text arc suggestion — 3 letters -->
+      <text x="90" y="98" font-family="'Cinzel Decorative',serif" font-size="14" fill="rgba(200,185,122,0.9)" text-anchor="middle" font-weight="700" filter="url(#glow)">LBV</text>
+    </svg>
+  </div>
 
-                <div class="role">
-                    <div class="role-titre">🔑 Membre Officiel (Hermano Oficial)</div>
-                    <div class="role-description">
-                        Un statut acquis par le mérite et le dévouement. Les membres officiels jouissent d'une pleine protection, de privilèges et 
-                        d'une voix dans les décisions importantes du gang. Ils doivent cotiser régulièrement pour maintenir leur statut.
-                    </div>
-                </div>
+  <h1 class="hero-title">Los Blanco Vatos</h1>
+  <p class="hero-sub">La Familia — Antes Que Todo</p>
+  <div class="hero-divider"></div>
+  <p class="hero-tagline">Une fraternité forgée dans le sang, la sueur et l'exil. Pas un gang — une famille.</p>
 
-                <div class="role">
-                    <div class="role-titre">🌱 Membre Non-Officiel (Aspirante)</div>
-                    <div class="role-description">
-                        Les nouveaux venus ou ceux en période de probation. Ils travaillent dur pour prouver leur loyauté et leur courage. 
-                        C'est une période cruciale pour démontrer qu'ils méritent d'intégrer complètement la famille.
-                    </div>
-                </div>
-            </div>
-        </section>
+  <div class="scroll-hint">
+    <span>DÉCOUVRIR</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
 
-        <!-- Système de Cotisation -->
-        <section id="cotisation">
-            <h2>Système de Cotisation</h2>
-            <p style="margin-bottom: 2rem; color: #a0a0a0;">
-                Le système de cotisation (Speedo d'Acide) est la colonne vertébrale financière et organisationnelle de Los Blanco Vatos. 
-                C'est un engagement envers la famille et une contribution à sa prospérité.
-            </p>
+<!-- HISTOIRE -->
+<section id="histoire">
+  <div class="section-inner">
+    <div class="section-label fade-in">01 — Origines</div>
+    <h2 class="section-title fade-in">L'Histoire des <br>Blanco Vatos</h2>
 
-            <div class="cotisation-container">
-                <!-- Membre Non-Officiel -->
-                <div class="cotisation-box">
-                    <div class="cotisation-titre">Aspirante (Non-Officiel)</div>
-                    <div class="cotisation-details">
-                        Pour devenir Membre Officiel et intégrer complètement Los Blanco Vatos
-                    </div>
-                    <div class="cotisation-requirement">
-                        <span style="color: #d4af37; font-size: 1.8rem;">3</span><br>
-                        Speedo d'Acide requis<br>
-                        <small style="color: #888;">Pour la promotion</small>
-                    </div>
-                    <p style="color: #888; font-size: 0.9rem;">
-                        Les membres non-officiels doivent compléter 3 Speedo d'Acide pour accéder au statut officiel. 
-                        Chaque Speedo complété rapporte des points de loyauté.
-                    </p>
-                </div>
+    <div class="histoire-grid">
+      <div class="histoire-text fade-in">
+        <p>Il y a bien longtemps, dans des ruelles anonymes de ce qui n'était encore qu'une ville en construction, des hommes venus de loin ont choisi de ne plus l'être. Des Brésiliens, des Colombiens, des Vénézuéliens, des Péruviens — tous portaient sur le dos le poids de leur exil et dans les yeux la même flamme : survivre, coûte que coûte, et ne jamais se laisser écraser.</p>
+        <p>Ces immigrés d'Amérique Latine n'avaient ni papiers solides, ni connexions, ni argent. Ce qu'ils avaient, c'était la rage tranquille de ceux qui n'ont plus rien à perdre, et la loyauté absolue envers ceux qui partagent leur sang ou leur souffrance. Ils se sont réunis dans l'arrière-salle d'une boucherie du quartier sud, autour d'une bouteille de cachaça et d'une table en bois brûlé.</p>
+        <p>Cette nuit-là, les <em>Los Blanco Vatos</em> sont nés. Blanc comme la pureté du serment qu'ils se sont prêtés. Vatos comme frères de la rue, frères de sang, frères dans l'adversité. Pas un groupe de criminels — une mafia à l'ancienne, avec ses codes d'honneur, ses règles silencieuses et une hiérarchie respectée jusqu'à la mort.</p>
+        <p>Au fil des décennies, la famille a grandi. Des fils ont rejoint les pères. Des étrangers sont devenus des frères. L'organisation a étendu ses tentacules discrètement, gérant des territoires, des contrats, des secrets — jamais avec fracas, toujours dans l'ombre. Les Los Blanco Vatos n'ont jamais eu besoin de crier leur nom pour que les gens comprennent qui commande.</p>
+        <p>Aujourd'hui, l'héritage est intact. La charte fondatrice — écrite à l'encre et au sang sur un bout de cuir tanné — dit ceci : <em>"Antes que todo, la familia. Después de todo, la familia."</em> Avant tout, la famille. Après tout, la famille.</p>
+      </div>
+      <div class="histoire-aside fade-in fade-in-delay-2">
+        <div class="quote-block">
+          <blockquote>"Nous ne sommes pas venus ici pour mendier une place. Nous sommes venus pour en construire une — avec nos mains, notre sueur, et si nécessaire, avec notre sang."</blockquote>
+          <cite>— Fondateur des L.B.V, circa 1970</cite>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <span class="timeline-year">ORIGINES</span>
+            <span class="timeline-desc">Fondation dans le quartier sud par des immigrés d'Amérique Latine fuyant la pauvreté et la violence politique.</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-year">ESSOR</span>
+            <span class="timeline-desc">Expansion territoriale. La famille double ses effectifs. Les premiers codes d'honneur sont gravés dans le marbre.</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-year">POUVOIR</span>
+            <span class="timeline-desc">Les L.B.V contrôlent en silence plusieurs secteurs clés. Respect craint et gagné à la fois.</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-year">AUJOURD'HUI</span>
+            <span class="timeline-desc">Nouvelle génération, même code. La familia continue son règne discret mais implacable.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-                <!-- Membre Officiel -->
-                <div class="cotisation-box active">
-                    <div class="cotisation-titre">Hermano Oficial</div>
-                    <div class="cotisation-details">
-                        Engagement permanent envers Los Blanco Vatos
-                    </div>
-                    <div class="cotisation-requirement">
-                        <span style="color: #d4af37; font-size: 1.8rem;">2</span><br>
-                        Speedo d'Acide par semaine<br>
-                        <small style="color: #888;">Maintien du statut</small>
-                    </div>
-                    <p style="color: #888; font-size: 0.9rem;">
-                        Une fois officiel, vous devez fournir 2 Speedo d'Acide par semaine minimum. Le reste des revenus 
-                        vous appartient. Les preuves doivent être envoyées au Discord.
-                    </p>
-                </div>
+<!-- HIERARCHIE -->
+<section id="hierarchie">
+  <div class="section-inner">
+    <div class="section-label fade-in">02 — Structure</div>
+    <h2 class="section-title fade-in">La Hiérarchie</h2>
 
-                <!-- Cas de Non-Respect -->
-                <div class="cotisation-box">
-                    <div class="cotisation-titre">⚠️ Sanctions</div>
-                    <div class="cotisation-details">
-                        Conséquences du non-respect des obligations
-                    </div>
-                    <div class="cotisation-requirement" style="border-color: #c44545; color: #ff6b6b;">
-                        Manquement = Renvoi<br>
-                        <small style="color: #999;">Ou pire</small>
-                    </div>
-                    <p style="color: #888; font-size: 0.9rem;">
-                        Si un membre ne respecte pas ses quotas de Speedo, des avertissements seront donnés. 
-                        Les récidives entraîneront un renvoi du gang.
-                    </p>
-                </div>
-            </div>
+    <div class="ornament fade-in">
+      <div class="ornament-line"></div>
+      <span class="ornament-symbol">◆</span>
+      <div class="ornament-line"></div>
+    </div>
 
-            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(0, 0, 0, 0.5); border-left: 4px solid #d4af37;">
-                <h3 style="margin-top: 0;">📋 Processus de Vérification</h3>
-                <p style="color: #a0a0a0; margin: 1rem 0;">
-                    ✓ Chaque Speedo d'Acide doit être documenté avec une preuve<br>
-                    ✓ Les preuves doivent être envoyées au Discord (canal #cotisations)<br>
-                    ✓ Un vérificateur officiel confirmera l'authenticité<br>
-                    ✓ Les revenus supplémentaires au-delà du quota appartiennent au membre
-                </p>
-            </div>
-        </section>
+    <div class="ranks-container fade-in">
+
+      <div class="rank-row jefe">
+        <div class="rank-number">I</div>
+        <div class="rank-badge">
+          <span class="rank-name">Jefe</span>
+          <span class="rank-title-es">El Patrón</span>
+        </div>
+        <div class="rank-desc">Le chef suprême. Sa parole est loi, ses décisions sont finales. Il dirige la familia avec autorité absolue, gère les alliances et protège l'honneur des Blanco Vatos. Nul ne le remet en question.</div>
+        <div class="rank-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="16,2 20,11 30,12 22,20 24,30 16,25 8,30 10,20 2,12 12,11" fill="none" stroke="rgba(200,185,122,0.7)" stroke-width="1.2"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="rank-row second">
+        <div class="rank-number">II</div>
+        <div class="rank-badge">
+          <span class="rank-name">Second</span>
+          <span class="rank-title-es">El Segundo</span>
+        </div>
+        <div class="rank-desc">Le bras droit du Jefe. En son absence, il commande avec la même autorité. Il assigne les missions, supervise les membres officiels et veille au bon fonctionnement des opérations quotidiennes.</div>
+        <div class="rank-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="24" height="24" rx="0" fill="none" stroke="rgba(168,168,168,0.6)" stroke-width="1.2" transform="rotate(45 16 16)"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="rank-row officiel">
+        <div class="rank-number">III</div>
+        <div class="rank-badge">
+          <span class="rank-name">Membre Officiel</span>
+          <span class="rank-title-es">Soldado de Confianza</span>
+        </div>
+        <div class="rank-desc">Il a prouvé sa valeur, accompli les épreuves imposées et gagné la confiance de la famille. Chaque semaine, il reçoit un minimum de 2 missions du Jefe ou du Second. Fiable, discret, engagé.</div>
+        <div class="rank-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="12" fill="none" stroke="rgba(90,90,90,0.8)" stroke-width="1.2"/>
+            <circle cx="16" cy="16" r="5" fill="none" stroke="rgba(90,90,90,0.8)" stroke-width="1"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="rank-row membre">
+        <div class="rank-number">IV</div>
+        <div class="rank-badge">
+          <span class="rank-name">Membre</span>
+          <span class="rank-title-es">Aspirante</span>
+        </div>
+        <div class="rank-desc">Nouveau venu accepté dans la familia. Il fait ses preuves, apprend les codes et attend sa chance de s'élever. Sa loyauté est observée, jugée en silence par ceux qui sont au-dessus de lui.</div>
+        <div class="rank-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="16" y1="4" x2="16" y2="28" stroke="rgba(90,90,90,0.4)" stroke-width="1.2"/>
+            <line x1="4" y1="16" x2="28" y2="16" stroke="rgba(90,90,90,0.4)" stroke-width="1.2"/>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TRAVAIL -->
+<section id="travail">
+  <div class="section-inner">
+    <div class="section-label fade-in">03 — Opérations</div>
+    <h2 class="section-title fade-in">Le Travail de la<br>Familia</h2>
+
+    <div class="missions-layout">
+      <div class="mission-card fade-in fade-in-delay-1">
+        <div class="mission-card-label">Promotion — Rang III</div>
+        <h3>Accéder au Rang de Membre Officiel</h3>
+        <p>Pour passer du statut de simple membre au rang de Membre Officiel, il faut accomplir <strong>2 missions</strong> assignées personnellement par le Jefe ou le Second. Ces missions testent la discrétion, la loyauté et la capacité à exécuter sous pression.</p>
+        <div class="mission-number">2</div>
+      </div>
+
+      <div class="mission-card fade-in fade-in-delay-2">
+        <div class="mission-card-label">Obligation hebdomadaire</div>
+        <h3>Missions des Membres Officiels</h3>
+        <p>Une fois Membre Officiel, l'engagement ne s'arrête pas. Un minimum de <strong>2 missions par semaine</strong> sera assigné par le Jefe ou le Second. Manquer ses obligations sans raison valable est une faute contre la familia.</p>
+        <div class="mission-number">2</div>
+      </div>
+    </div>
+
+    <div class="progression-block fade-in fade-in-delay-3">
+      <div class="progression-title">◆ Chemin de Progression</div>
+      <div class="steps-row">
+        <div class="step-box">
+          <div class="step-num">01</div>
+          <div class="step-label">Intégration</div>
+          <div class="step-desc">Accepté dans la familia en tant que Membre (Aspirante). Observation, apprentissage des codes.</div>
+        </div>
+        <div class="step-arrow">›</div>
+        <div class="step-box">
+          <div class="step-num">02</div>
+          <div class="step-label">Épreuves</div>
+          <div class="step-desc">Accomplir 2 missions assignées par le Jefe ou le Second. Prouver sa valeur en action.</div>
+        </div>
+        <div class="step-arrow">›</div>
+        <div class="step-box">
+          <div class="step-num">03</div>
+          <div class="step-label">Promotion</div>
+          <div class="step-desc">Élévation au rang de Membre Officiel (Soldado de Confianza). Reconnaissance pleine de la familia.</div>
+        </div>
+        <div class="step-arrow">›</div>
+        <div class="step-box">
+          <div class="step-num">04</div>
+          <div class="step-label">Engagement</div>
+          <div class="step-desc">Minimum 2 missions par semaine. Rester actif, loyal, discret — toujours à la hauteur.</div>
+        </div>
+      </div>
+
+      <div class="weekly-rule">
+        <div class="weekly-rule-icon">⚠</div>
+        <div class="weekly-rule-text">
+          <h4>Règle Fondamentale</h4>
+          <p>Aucune mission ne se refuse sans raison légitime approuvée par la hiérarchie. L'inactivité est une trahison silencieuse. La familia exige engagement, discrétion et respect des rangs à chaque instant.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Los Blanco Vatos</div>
+  <p class="footer-tagline">Antes que todo — la familia. Después de todo — la familia.</p>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">© Los Blanco Vatos — FiveM RP — La Familia Ante Todo</p>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    setTimeout(() => {
+      ring.style.left = e.clientX + 'px';
+      ring.style.top = e.clientY + 'px';
+    }, 60);
+  });
+  document.querySelectorAll('a, .rank-row, .mission-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.style.width = '60px';
+      ring.style.height = '60px';
+      ring.style.opacity = '0.5';
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+      ring.style.opacity = '1';
+    });
+  });
+
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) navbar.classList.add('scrolled');
+    else navbar.classList.remove('scrolled');
+  });
+
+  // Intersection observer for fade-in
+  const fadeEls = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  fadeEls.forEach(el => observer.observe(el));
+
+  // Smooth nav click
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
